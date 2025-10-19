@@ -110,17 +110,17 @@ fun UI(modifier: Modifier = Modifier){
         //Define the main menu composable
         composable("MainMenu"){ TitlePage(modifier, navController) }
         //Define the each game's start screen composable
-        composable("WordStartScreen"){ StartScreens().WordStartScreen(modifier, navController) }
-        composable("BirdStartScreen"){ StartScreens().BirdStartScreen(modifier, navController) }
-        composable("TicStartScreen"){ StartScreens().TicStartScreen(modifier, navController) }
+        composable("WordStartScreen"){ WordGuessGame().StartScreen(modifier, navController) }
+        composable("BirdStartScreen"){ BirdGame().StartScreen(modifier, navController) }
+        composable("TicStartScreen"){ TicTacToe().StartScreen(modifier, navController) }
         //Define each game's game screen composable
-        composable("WordGuessGame") { Games().WordGuessGame(modifier, navController) }
-        composable("BirdGame") { Games().BirdGame(modifier, navController) }
-        composable("TicTacToe") { Games().TicTacToe(modifier, navController) }
+        composable("WordGuessGame") { WordGuessGame().PlayGame(modifier, navController) }
+        composable("BirdGame") { BirdGame().PlayGame(modifier, navController) }
+        composable("TicTacToe") { TicTacToe().PlayGame(modifier, navController) }
         //Define each game's game over screen composable
-        composable("WordGuessGameOver") { GameOverScreens().WordGuessGameOver(modifier, navController) }
-        composable("BirdGameOver") { GameOverScreens().BirdGameOver(modifier, navController) }
-        composable("TicTacToeGameOver") { GameOverScreens().TicTacToeGameOver(modifier, navController) }
+        composable("WordGuessGameOver") { WordGuessGame().GameOver(modifier, navController) }
+        composable("BirdGameOver") { BirdGame().GameOver(modifier, navController) }
+        composable("TicTacToeGameOver") { TicTacToe().GameOver(modifier, navController) }
     })
 }
 

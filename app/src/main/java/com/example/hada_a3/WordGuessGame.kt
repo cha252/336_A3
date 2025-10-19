@@ -9,9 +9,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
-class Games {
+class WordGuessGame:Game {
     @Composable
-    fun WordGuessGame(modifier: Modifier = Modifier, navController: NavController) {
+    override fun StartScreen(modifier: Modifier, navController: NavController) {
+        Column(
+            modifier = modifier
+        ){
+            Box(modifier = Modifier.weight(8.0f)){
+                Text("Word Guess Start Screen")
+            }
+            Box(modifier = Modifier.weight(2.0f)){
+                Button(onClick = { navController.navigate("WordGuessGame") }) {
+                    Text("Start")
+                }
+            }
+        }
+    }
+
+    @Composable
+    override fun PlayGame(modifier: Modifier, navController: NavController) {
         Column(
             modifier = modifier
         ){
@@ -29,39 +45,22 @@ class Games {
     }
 
     @Composable
-    fun BirdGame(modifier: Modifier = Modifier, navController: NavController) {
+    override fun GameOver(modifier: Modifier, navController: NavController) {
         Column(
             modifier = modifier
         ){
             Box(modifier = Modifier.weight(8.0f)){
-                Text("Bird Game Screen")
+                Text("Word Guess Game Screen")
             }
             Box(modifier = Modifier.weight(2.0f)){
                 Row(){
                     Button(
-                        onClick = { navController.navigate("BirdGameOver") },
+                        onClick = { navController.navigate("WordStartScreen") },
                     ) {
-                        Text("Finish Game")
+                        Text("Start again")
                     }
-                }
-            }
-        }
-    }
-
-    @Composable
-    fun TicTacToe(modifier: Modifier = Modifier, navController: NavController) {
-        Column(
-            modifier = modifier
-        ){
-            Box(modifier = Modifier.weight(8.0f)){
-                Text("Tic Tac Toe Screen")
-            }
-            Box(modifier = Modifier.weight(2.0f)){
-                Row(){
-                    Button(
-                        onClick = { navController.navigate("TicTacToeGameOver") },
-                    ) {
-                        Text("Finish Game")
+                    Button(onClick = { navController.navigate("MainMenu") }) {
+                        Text("Home")
                     }
                 }
             }
