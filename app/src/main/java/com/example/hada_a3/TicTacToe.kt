@@ -10,6 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 class TicTacToe:Game {
+    //Initialise scores uses a p2Score variable as it is a 2 player game
+    override var playerScore : Int = 0
+    var p2Score : Int = 0
+    var p1Turn : Boolean = true
+
+
     @Composable
     override fun StartScreen(modifier: Modifier, navController: NavController) {
         Column(
@@ -28,6 +34,11 @@ class TicTacToe:Game {
 
     @Composable
     override fun PlayGame(modifier: Modifier, navController: NavController) {
+        //Initialise variables
+        playerScore = 0
+        p2Score = 0
+        p1Turn = true
+
         Column(
             modifier = modifier
         ){

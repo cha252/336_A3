@@ -10,6 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 class WordGuessGame:Game {
+    //Initialise scores
+    override var playerScore : Int = 0
+    var p2Score : Int = 0
+    var p1Turn : Boolean = true
+
     @Composable
     override fun StartScreen(modifier: Modifier, navController: NavController) {
         Column(
@@ -28,6 +33,8 @@ class WordGuessGame:Game {
 
     @Composable
     override fun PlayGame(modifier: Modifier, navController: NavController) {
+        playerScore = 0
+
         Column(
             modifier = modifier
         ){

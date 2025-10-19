@@ -5,12 +5,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 interface Game {
+    //Each game's variables
+    var playerScore : Int
+
+    //Composable functions for each screen of the game
     @Composable
     fun StartScreen(modifier: Modifier, navController: NavController)
-
     @Composable
     fun PlayGame(modifier: Modifier, navController: NavController)
-
     @Composable
     fun GameOver(modifier: Modifier, navController: NavController)
 }

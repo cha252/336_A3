@@ -10,6 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 class BirdGame:Game {
+    //Initialise scores
+    override var playerScore : Int = 0
+
     @Composable
     override fun StartScreen(modifier: Modifier, navController: NavController) {
         Column(
