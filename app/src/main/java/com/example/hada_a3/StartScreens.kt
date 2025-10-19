@@ -9,14 +9,13 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
 class StartScreens {
-
     @Composable
     fun WordStartScreen(modifier: Modifier, navController: NavController) {
         Column(
             modifier = modifier
         ){
             Box(modifier = Modifier.weight(8.0f)){
-                Text("Word Guess Game Screen")
+                Text("Word Guess Start Screen")
             }
             Box(modifier = Modifier.weight(2.0f)){
                 Button(onClick = { navController.navigate("WordGuessGame") }) {
@@ -32,7 +31,7 @@ class StartScreens {
             modifier = modifier
         ){
             Box(modifier = Modifier.weight(8.0f)){
-                Text("Word Guess Game Screen")
+                Text("Bird Start Screen")
             }
             Box(modifier = Modifier.weight(2.0f)){
                 Button(onClick = { navController.navigate("BirdGame") }) {
@@ -48,7 +47,7 @@ class StartScreens {
             modifier = modifier
         ){
             Box(modifier = Modifier.weight(8.0f)){
-                Text("Word Guess Game Screen")
+                Text("Tic Tac Toe Start Screen")
             }
             Box(modifier = Modifier.weight(2.0f)){
                 Button(onClick = { navController.navigate("TicTacToe") }) {

@@ -109,13 +109,18 @@ fun UI(modifier: Modifier = Modifier){
     NavHost(navController = navController, startDestination = "MainMenu", builder = {
         //Define the main menu composable
         composable("MainMenu"){ TitlePage(modifier, navController) }
-        //Define the each game's start screen and playing screen composable for the nav controller
+        //Define the each game's start screen composable
         composable("WordStartScreen"){ StartScreens().WordStartScreen(modifier, navController) }
         composable("BirdStartScreen"){ StartScreens().BirdStartScreen(modifier, navController) }
         composable("TicStartScreen"){ StartScreens().TicStartScreen(modifier, navController) }
+        //Define each game's game screen composable
         composable("WordGuessGame") { Games().WordGuessGame(modifier, navController) }
         composable("BirdGame") { Games().BirdGame(modifier, navController) }
         composable("TicTacToe") { Games().TicTacToe(modifier, navController) }
+        //Define each game's game over screen composable
+        composable("WordGuessGameOver") { GameOverScreens().WordGuessGameOver(modifier, navController) }
+        composable("BirdGameOver") { GameOverScreens().BirdGameOver(modifier, navController) }
+        composable("TicTacToeGameOver") { GameOverScreens().TicTacToeGameOver(modifier, navController) }
     })
 }
 
@@ -126,52 +131,3 @@ fun TitlePreview() {
         UI()
     }
 }
-
-//@Composable
-//fun WordGuessGame(modifier: Modifier = Modifier, navController: NavController) {
-//    Column(
-//        modifier = modifier
-//    ){
-//        Box(modifier = Modifier.weight(8.0f)){
-//            Text("Word Guess Game Screen")
-//        }
-//        Box(modifier = Modifier.weight(2.0f)){
-//            Button(onClick = { navController.navigate("MainMenu") }) {
-//                Text("Back")
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun BirdGame(modifier: Modifier = Modifier, navController: NavController) {
-//    Column(
-//        modifier = modifier
-//    ){
-//        Box(modifier = Modifier.weight(8.0f)){
-//            Text("Bird Game Screen")
-//        }
-//        Box(modifier = Modifier.weight(2.0f)){
-//            Button(onClick = { navController.navigate("MainMenu") }) {
-//                Text("Back")
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun TicTacToe(modifier: Modifier = Modifier, navController: NavController) {
-//    Column(
-//        modifier = modifier
-//    ){
-//        Box(modifier = Modifier.weight(8.0f)){
-//            Text("Tic Tac Toe Screen")
-//        }
-//        Box(modifier = Modifier.weight(2.0f)){
-//            Button(onClick = { navController.navigate("MainMenu") }) {
-//                Text("Back")
-//            }
-//        }
-//    }
-//}
-//

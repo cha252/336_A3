@@ -9,9 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 
-class Games {
+class GameOverScreens {
     @Composable
-    fun WordGuessGame(modifier: Modifier = Modifier, navController: NavController) {
+    fun WordGuessGameOver(modifier: Modifier = Modifier, navController: NavController) {
         Column(
             modifier = modifier
         ){
@@ -19,17 +19,22 @@ class Games {
                 Text("Word Guess Game Screen")
             }
             Box(modifier = Modifier.weight(2.0f)){
-                Button(
-                    onClick = { navController.navigate("WordGuessGameOver") },
-                ) {
-                    Text("Finish Game")
+                Row(){
+                    Button(
+                        onClick = { navController.navigate("WordStartScreen") },
+                    ) {
+                        Text("Start again")
+                    }
+                    Button(onClick = { navController.navigate("MainMenu") }) {
+                        Text("Home")
+                    }
                 }
             }
         }
     }
 
     @Composable
-    fun BirdGame(modifier: Modifier = Modifier, navController: NavController) {
+    fun BirdGameOver(modifier: Modifier = Modifier, navController: NavController) {
         Column(
             modifier = modifier
         ){
@@ -39,9 +44,12 @@ class Games {
             Box(modifier = Modifier.weight(2.0f)){
                 Row(){
                     Button(
-                        onClick = { navController.navigate("BirdGameOver") },
+                        onClick = { navController.navigate("BirdStartScreen") },
                     ) {
-                        Text("Finish Game")
+                        Text("Start again")
+                    }
+                    Button(onClick = { navController.navigate("MainMenu") }) {
+                        Text("Home")
                     }
                 }
             }
@@ -49,7 +57,7 @@ class Games {
     }
 
     @Composable
-    fun TicTacToe(modifier: Modifier = Modifier, navController: NavController) {
+    fun TicTacToeGameOver(modifier: Modifier = Modifier, navController: NavController) {
         Column(
             modifier = modifier
         ){
@@ -59,9 +67,12 @@ class Games {
             Box(modifier = Modifier.weight(2.0f)){
                 Row(){
                     Button(
-                        onClick = { navController.navigate("TicTacToeGameOver") },
+                        onClick = { navController.navigate("TicStartScreen") },
                     ) {
-                        Text("Finish Game")
+                        Text("Start again")
+                    }
+                    Button(onClick = { navController.navigate("MainMenu") }) {
+                        Text("Home")
                     }
                 }
             }
