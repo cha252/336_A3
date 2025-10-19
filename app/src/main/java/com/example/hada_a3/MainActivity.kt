@@ -17,9 +17,11 @@ import com.example.hada_a3.ui.theme.Hada_A3Theme
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -42,13 +44,13 @@ class MainActivity : ComponentActivity() {
 
 //Global list of names of the thumbnails
 val gameList = listOf(
-    "word",
-    "bird",
-    "tic"
+    "WordGuessGame",
+    "BirdGame",
+    "TicTacToe"
 )
 
 @Composable
-fun TitlePage(modifier: Modifier = Modifier) {
+fun TitlePage(modifier: Modifier = Modifier, navController: NavController) {
     Column{
         //Display title
         Box(
@@ -79,13 +81,62 @@ fun TitlePage(modifier: Modifier = Modifier) {
                         .fillMaxWidth()
                         .padding(10.dp)
                 ){
-                    Text(
-                        name,
-                        modifier = Modifier
-                            .padding(10.dp)
-                            .align(Alignment.Center)
-                    )
+                    Button(onClick = { navController.navigate(name) }) {
+                        Text(
+                            name,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+                    }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun WordGuessGame(modifier: Modifier = Modifier, navController: NavController) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ){
+        Box(modifier = Modifier.weight(8.0f)){
+            Text("Word Guess Game Screen")
+        }
+        Box(modifier = Modifier.weight(2.0f)){
+            Button(onClick = { navController.navigate("MainMenu") }) {
+                Text("Back")
+            }
+        }
+    }
+}
+
+@Composable
+fun BirdGame(modifier: Modifier = Modifier, navController: NavController) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ){
+        Box(modifier = Modifier.weight(8.0f)){
+            Text("Bird Game Screen")
+        }
+        Box(modifier = Modifier.weight(2.0f)){
+            Button(onClick = { navController.navigate("MainMenu") }) {
+                Text("Back")
+            }
+        }
+    }
+}
+
+@Composable
+fun TicTacToe(modifier: Modifier = Modifier, navController: NavController) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ){
+        Box(modifier = Modifier.weight(8.0f)){
+            Text("Tic Tac Toe Screen")
+        }
+        Box(modifier = Modifier.weight(2.0f)){
+            Button(onClick = { navController.navigate("MainMenu") }) {
+                Text("Back")
             }
         }
     }
@@ -97,11 +148,11 @@ fun UI(modifier: Modifier = Modifier){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "MainMenu", builder = {
         //Define the main menu composable
-        composable("MainMenu"){ TitlePage() }
+        composable("MainMenu"){ TitlePage(modifier, navController) }
         //Define the each game's composable
-//        composable("WordGuessGame") { WordGuessGame() }
-//        composable("BirdGame") { BirdGame() }
-//        composable("TicTacToe") { TicTacToe() }
+        composable("WordGuessGame") { WordGuessGame(modifier, navController) }
+        composable("BirdGame") { BirdGame(modifier, navController) }
+        composable("TicTacToe") { TicTacToe(modifier, navController) }
     })
 }
 
