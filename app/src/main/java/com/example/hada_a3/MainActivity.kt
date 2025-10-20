@@ -48,9 +48,8 @@ class MainActivity : ComponentActivity() {
 
 //List for the names of the games
 val gameList = listOf(
-    "WordStartScreen",
-    "BirdStartScreen",
-    "TicStartScreen"
+    "WordGuessGame",
+    "TicTacToe"
 )
 
 @Composable
@@ -109,18 +108,9 @@ fun UI(modifier: Modifier = Modifier){
     NavHost(navController = navController, startDestination = "MainMenu", builder = {
         //Define the main menu composable
         composable("MainMenu"){ TitlePage(modifier, navController) }
-        //Define the each game's start screen composable
-        composable("WordStartScreen"){ WordGuessGame().StartScreen(modifier, navController) }
-        composable("BirdStartScreen"){ BirdGame().StartScreen(modifier, navController) }
-        composable("TicStartScreen"){ TicTacToe().StartScreen(modifier, navController) }
         //Define each game's game screen composable
         composable("WordGuessGame") { WordGuessGame().PlayGame(modifier, navController) }
-        composable("BirdGame") { BirdGame().PlayGame(modifier, navController) }
         composable("TicTacToe") { TicTacToe().PlayGame(modifier, navController) }
-        //Define each game's game over screen composable
-        composable("WordGuessGameOver") { WordGuessGame().GameOver(modifier, navController) }
-        composable("BirdGameOver") { BirdGame().GameOver(modifier, navController) }
-        composable("TicTacToeGameOver") { TicTacToe().GameOver(modifier, navController) }
     })
 }
 

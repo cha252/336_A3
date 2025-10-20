@@ -1,19 +1,22 @@
 package com.example.hada_a3
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,61 +32,44 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 
-class TicTacToe:Game {
-    @Composable
-    override fun StartScreen(modifier: Modifier, navController: NavController) {
-        Column(
-            modifier = modifier
-        ){
-            Box(modifier = Modifier.weight(8.0f)){
-                Text("Tic Tac Toe Start Screen")
-            }
-            Box(modifier = Modifier.weight(2.0f)){
-                Button(onClick = { navController.navigate("TicTacToe") }) {
-                    Text("Start")
-                }
-            }
+class TicTacToe{
+    //Function to check if a game state is a winning game state or not
+    fun checkWin(winningStates: Array<Array<Int>>, playerGrid: Array<Int>): Boolean {
+        return winningStates.any { winningState ->
+            winningState.indices.all { i -> winningState[i] == 0 || playerGrid[i] == 1 }
         }
     }
 
-    @Composable
-    override fun PlayGame(modifier: Modifier, navController: NavController) {
+    @Composable fun PlayGame(modifier: Modifier, navController: NavController) {
         //Initialise variables
         var gameGrid by rememberSaveable { mutableStateOf(Array(9) { 0 }) }
+        var p1Grid by rememberSaveable { mutableStateOf(Array(9) { 0 }) }
+        var p2Grid by rememberSaveable { mutableStateOf(Array(9) { 0 }) }
         var p1Turn by rememberSaveable { mutableStateOf(true) }
-        var playerScore by rememberSaveable { mutableIntStateOf(0) }
-        var p2Score by rememberSaveable { mutableIntStateOf(0) }
-        var gameOver by rememberSaveable { mutableStateOf(false) }
+        var p1Score by rememberSaveable{ mutableIntStateOf(0) }
+        var p2Score by rememberSaveable{ mutableIntStateOf(0) }
         var totalTurns by rememberSaveable { mutableIntStateOf(0) }
+        var p1Win by rememberSaveable { mutableStateOf(false) }
+        var p2Win by rememberSaveable { mutableStateOf(false) }
+        var draw by rememberSaveable { mutableStateOf(false) }
 
-        //111   000   000
-        //000   111   000
-        //000   000   111
 
-        //100   010   001
-        //100   010   001
-        //100   010   001
-
-        //100   001
-        //010   010
-        //001   100
-
-        //Winning states for either player where 1 is their tile and 0 is not theirs or empty as above
-        val winningStates = listOf(
+        //Winning states for either player where 1 is their tile and 0 is  anything else
+        val winningStates = arrayOf(
             //Horizontal wins
-            listOf(1, 1, 1, 0, 0, 0, 0 ,0 ,0),
-            listOf(0, 0, 0, 1, 1, 1, 0 ,0 ,0),
-            listOf(0, 0, 0, 0 ,0 ,0, 1, 1, 1),
+            arrayOf(1, 1, 1, 0, 0, 0, 0 ,0 ,0),
+            arrayOf(0, 0, 0, 1, 1, 1, 0 ,0 ,0),
+            arrayOf(0, 0, 0, 0 ,0 ,0, 1, 1, 1),
             //Vertical wins
-            listOf(1, 0, 0, 1, 0, 0, 1 ,0, 0),
-            listOf(0, 1, 0, 0, 1, 0, 0, 1, 0),
-            listOf(0, 0, 1, 0, 0, 1, 0, 0, 1),
+            arrayOf(1, 0, 0, 1, 0, 0, 1 ,0, 0),
+            arrayOf(0, 1, 0, 0, 1, 0, 0, 1, 0),
+            arrayOf(0, 0, 1, 0, 0, 1, 0, 0, 1),
             //Diagonal wins
-            listOf(1, 0, 0, 0, 1, 0, 0, 0, 1),
-            listOf(0, 0, 1, 0, 1, 0, 1, 0, 0)
+            arrayOf(1, 0, 0, 0, 1, 0, 0, 0, 1),
+            arrayOf(0, 0, 1, 0, 1, 0, 1, 0, 0)
         )
 
         //Column to hold the UI of the game
@@ -99,7 +85,7 @@ class TicTacToe:Game {
                 Row(){
                     //Display player 1's score
                     Text(
-                        "Player 1 Score: $playerScore",
+                        "Player 1 Score: $p1Score",
                         modifier = Modifier
                             .weight(0.5f)
                             .align(CenterVertically),
@@ -159,17 +145,34 @@ class TicTacToe:Game {
                                             //If the tile has not already been changed
                                             if(gameGrid[index] == 0){
                                                 //If it is player 1's turn
-                                                if(p1Turn){ gameGrid[index] = 1}
-                                                else{ gameGrid[index] = 2 }
+                                                if(p1Turn){
+                                                    gameGrid[index] = 1
+                                                    p1Grid[index] = 1
+                                                }
+                                                else{
+                                                    gameGrid[index] = 2
+                                                    p2Grid[index] = 1
+                                                }
                                                 //Alternate which player's turn it is
                                                 p1Turn = !p1Turn
                                                 //Increment total turns
                                                 totalTurns++
-                                                //Check if the board is full
-                                                if(totalTurns == 9) { gameOver = true }
-                                                //Otherwise check if one of the players has won
-                                                else{
-
+                                                //If p1 has won
+                                                if(checkWin(winningStates, p1Grid)){
+                                                    //Increment score and set p1 win boolean to true
+                                                    p1Score++
+                                                    p1Win = true
+                                                }
+                                                //If p2 has won
+                                                else if(checkWin(winningStates, p2Grid)){
+                                                    //Increment score and set p2 win boolean to true
+                                                    p2Score++
+                                                    p2Win = true
+                                                }
+                                                //If neither player has won and the board is full
+                                                if(totalTurns == 9) {
+                                                    //Set draw boolean to true
+                                                    draw = true
                                                 }
                                             }
                                         }
@@ -194,42 +197,63 @@ class TicTacToe:Game {
                     }
                 }
             }
-
-
-            //Box for finish game - need to remove
+            //Box to fill space at bottom
             Box(
                 modifier = Modifier
                     .weight(0.3f)
-            ){
-                Button(
-                    onClick = { navController.navigate("TicTacToeGameOver")},
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.Center)
-                ){
-                    Text("Finish Game")
-                }
-            }
+            )
         }
-    }
 
-    @Composable
-    override fun GameOver(modifier: Modifier, navController: NavController) {
-        Column(
-            modifier = modifier
-        ){
-            Box(modifier = Modifier.weight(8.0f)){
-                Text("Tic Tac Toe Screen")
-            }
-            Box(modifier = Modifier.weight(2.0f)){
-                Row(){
-                    Button(
-                        onClick = { navController.navigate("TicStartScreen") },
-                    ) {
-                        Text("Start again")
-                    }
-                    Button(onClick = { navController.navigate("MainMenu") }) {
-                        Text("Home")
+        //If either of the players has won or the board is full
+        if(p1Win || p2Win || draw){
+            //Set the text for the alert dialog
+            var alertText = ""
+            if(p1Win){ alertText = "Player 1 Wins!" }
+            else if(p2Win){ alertText = "Player 2 Wins!" }
+            else{ alertText = "Draw!" }
+
+            //Display a dialog to show the result
+            Dialog(onDismissRequest = {}) {
+                //Card to show the result
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Column(){
+                        //Text to show the result
+                        Text(
+                            text = alertText,
+                            modifier = Modifier
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center,
+                        )
+                        //Row of buttons to either go back to the home page or play again
+                        Row(){
+                            //Button to go back to the home page
+                            Button(
+                                onClick = { navController.navigate("MainMenu") },
+                            ) {
+                                Text("Home")
+                            }
+                            //Button to play again
+                            Button(
+                                onClick = {
+                                    //Reset the game
+                                    p1Win = false
+                                    p2Win = false
+                                    draw = false
+                                    gameGrid = Array(9) { 0 }
+                                    p1Grid = Array(9) { 0 }
+                                    p2Grid = Array(9) { 0 }
+                                    totalTurns = 0
+                                }
+                            ){
+                                Text("Play Again")
+                            }
+                        }
                     }
                 }
             }
