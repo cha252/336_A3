@@ -50,6 +50,10 @@ class BirdGame:Game {
     }
 
     @Composable
+    override fun PauseScreen(modifier: Modifier, navController: NavController) {
+    }
+
+    @Composable
     override fun GameOver(modifier: Modifier, navController: NavController) {
         Column(
             modifier = modifier

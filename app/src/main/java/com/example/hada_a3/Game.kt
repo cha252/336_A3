@@ -13,6 +13,10 @@ interface Game {
     fun StartScreen(modifier: Modifier, navController: NavController)
     @Composable
     fun PlayGame(modifier: Modifier, navController: NavController)
+
+    @Composable
+    fun PauseScreen(modifier: Modifier, navController: NavController)
+
     @Composable
     fun GameOver(modifier: Modifier, navController: NavController)
 }
