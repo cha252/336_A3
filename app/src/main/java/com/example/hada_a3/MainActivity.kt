@@ -48,9 +48,10 @@ class MainActivity : ComponentActivity() {
 
 //List for the names of the games
 val gameList = listOf(
-    "WordGuessGame",
     "TicTacToe",
-    "SimonSays"
+    "SimonSays",
+    "Wires",
+
 )
 
 @Composable
@@ -110,9 +111,10 @@ fun UI(modifier: Modifier = Modifier){
         //Define the main menu composable
         composable("MainMenu"){ TitlePage(modifier, navController) }
         //Define each game's game screen composable
-        composable("WordGuessGame") { WordGuessGame().PlayGame(modifier, navController) }
         composable("TicTacToe") { TicTacToe().PlayGame(modifier, navController) }
         composable("SimonSays") { SimonSays().PlayGame(modifier, navController) }
+        composable("Wires") { Wires().PlayGame(modifier, navController) }
+
     })
 }
 

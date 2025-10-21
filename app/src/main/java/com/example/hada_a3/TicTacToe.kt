@@ -56,7 +56,6 @@ class TicTacToe{
         var p2Win by rememberSaveable { mutableStateOf(false) }
         var draw by rememberSaveable { mutableStateOf(false) }
 
-
         //Winning states for either player where 1 is their tile and 0 is  anything else
         val winningStates = arrayOf(
             //Horizontal wins
@@ -71,6 +70,43 @@ class TicTacToe{
             arrayOf(1, 0, 0, 0, 1, 0, 0, 0, 1),
             arrayOf(0, 0, 1, 0, 1, 0, 1, 0, 0)
         )
+
+        //Function to react to a box being clicked
+        fun boxClicked(index:Int) {
+            //If the tile has not already been changed
+            if(gameGrid[index] == 0){
+                //If it is player 1's turn
+                if(p1Turn){
+                    gameGrid[index] = 1
+                    p1Grid[index] = 1
+                }
+                else{
+                    gameGrid[index] = 2
+                    p2Grid[index] = 1
+                }
+                //Alternate which player's turn it is
+                p1Turn = !p1Turn
+                //Increment total turns
+                totalTurns++
+                //If p1 has won
+                if(checkWin(winningStates, p1Grid)){
+                    //Increment score and set p1 win boolean to true
+                    p1Score++
+                    p1Win = true
+                }
+                //If p2 has won
+                else if(checkWin(winningStates, p2Grid)){
+                    //Increment score and set p2 win boolean to true
+                    p2Score++
+                    p2Win = true
+                }
+                //If neither player has won and the board is full
+                if(totalTurns == 9) {
+                    //Set draw boolean to true
+                    draw = true
+                }
+            }
+        }
 
         //Column to hold the UI of the game
         Column(
@@ -142,39 +178,7 @@ class TicTacToe{
                                         .align(Alignment.CenterVertically)
                                         .weight(0.33f)
                                         .clickable {
-                                            //If the tile has not already been changed
-                                            if(gameGrid[index] == 0){
-                                                //If it is player 1's turn
-                                                if(p1Turn){
-                                                    gameGrid[index] = 1
-                                                    p1Grid[index] = 1
-                                                }
-                                                else{
-                                                    gameGrid[index] = 2
-                                                    p2Grid[index] = 1
-                                                }
-                                                //Alternate which player's turn it is
-                                                p1Turn = !p1Turn
-                                                //Increment total turns
-                                                totalTurns++
-                                                //If p1 has won
-                                                if(checkWin(winningStates, p1Grid)){
-                                                    //Increment score and set p1 win boolean to true
-                                                    p1Score++
-                                                    p1Win = true
-                                                }
-                                                //If p2 has won
-                                                else if(checkWin(winningStates, p2Grid)){
-                                                    //Increment score and set p2 win boolean to true
-                                                    p2Score++
-                                                    p2Win = true
-                                                }
-                                                //If neither player has won and the board is full
-                                                if(totalTurns == 9) {
-                                                    //Set draw boolean to true
-                                                    draw = true
-                                                }
-                                            }
+                                            boxClicked(index);
                                         }
                                 ) {
                                     when (gameGrid[index]) {
