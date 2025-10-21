@@ -37,6 +37,7 @@ class SimonSays {
         var lost by rememberSaveable { mutableStateOf(false) }
         var started by rememberSaveable { mutableStateOf(false) }
         var round by rememberSaveable { mutableIntStateOf(0) }
+        var hiScore by rememberSaveable { mutableIntStateOf(0) }
         val defaultColors = listOf(
             Color.Red,
             Color.Blue,
@@ -75,6 +76,8 @@ class SimonSays {
 
         //Function to show the sequence to copy
         fun showSequence() {
+            //Increment the round
+            round++
             //Set playing to false
             playing = false
             //Use a coroutine to light up the boxes as it uses a delay
@@ -135,6 +138,14 @@ class SimonSays {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            //If round is greater than 0
+            if(round > 0){
+                //Text to show the round
+                Text(text = "Round: $round")
+            }
+            //Add a spacer
+            Spacer(modifier = Modifier.height(30.dp))
+
             //Row to hold the first row of boxes
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -220,9 +231,10 @@ class SimonSays {
                     shape = RoundedCornerShape(16.dp),
                 ) {
                     Column(){
+                        if(round > hiScore){ hiScore = round }
                         //Text to show the result
                         Text(
-                            text = "Game Over",
+                            text = "Game Over\nGot to Round $round\nHi-Score: $hiScore",
                             modifier = Modifier
                                 .wrapContentSize(Alignment.Center),
                             textAlign = TextAlign.Center,
@@ -231,7 +243,7 @@ class SimonSays {
                         Row(){
                             //Button to go back to the home page
                             Button(
-                                onClick = { navController.navigate("MainMenu") },
+                                onClick = { navController.navigate("MainMenu") }
                             ) {
                                 Text("Home")
                             }
@@ -241,6 +253,7 @@ class SimonSays {
                                 onClick = {
                                     started = false
                                     lost = false
+                                    round = 0
                                 }
                             ){
                                 Text("Play Again")
