@@ -9,6 +9,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -32,8 +33,10 @@ class SimonSays {
     @Composable
     fun PlayGame(modifier: Modifier, navController: NavController) {
         //Declare variables
-        var playing by rememberSaveable { mutableStateOf(true) }
+        var playing by rememberSaveable { mutableStateOf(false) }
         var lost by rememberSaveable { mutableStateOf(false) }
+        var started by rememberSaveable { mutableStateOf(false) }
+        var round by rememberSaveable { mutableIntStateOf(0) }
         val defaultColors = listOf(
             Color.Red,
             Color.Blue,
@@ -45,7 +48,7 @@ class SimonSays {
         var sequence by rememberSaveable { mutableStateOf(ArrayList<Int>()) }
         var playerSequence by rememberSaveable { mutableStateOf(ArrayList<Int>()) }
 
-        // State list of lightBoxes
+        //State list of lightBoxes
         var boxes by rememberSaveable { mutableStateOf(defaultColors.map {LightBox(it.toArgb())})}
 
         //Function to light up a box
@@ -63,10 +66,8 @@ class SimonSays {
             scope.launch {
                 //Set box colour to lightened color
                 boxes = boxes.toMutableList().also { it[index] = LightBox(lightened) }
-
                 //Wait for 300ms
                 delay(300)
-
                 // Set back to original color
                 boxes = boxes.toMutableList().also { it[index] = LightBox(originalColor.toArgb())}
             }
@@ -189,15 +190,24 @@ class SimonSays {
                         }
                 )
             }
-            Button(onClick = {
-                sequence.clear()
-                playerSequence.clear()
-                addStepToSequence()
-                showSequence()
-            }) {
-                Text("Start Game")
+            Spacer(modifier = Modifier.height(30.dp))
+
+            //If lost is true
+            if(!started){
+                Button(onClick = {
+                    //Initialise game variables
+                    sequence.clear()
+                    playerSequence.clear()
+                    playing = true
+                    started = true
+                    addStepToSequence()
+                    showSequence()
+                }) {
+                    Text("Start Game")
+                }
             }
         }
+        //If lost is true
         if(lost){
             //Display a dialog to show the result
             Dialog(onDismissRequest = {}) {
@@ -227,8 +237,9 @@ class SimonSays {
                             }
                             //Button to play again
                             Button(
+                                //Set lost and started to false
                                 onClick = {
-                                    //Reset the game
+                                    started = false
                                     lost = false
                                 }
                             ){
