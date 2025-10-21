@@ -3,10 +3,12 @@ package com.example.hada_a3
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.material3.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -15,35 +17,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.toColor
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SimonSays {
     //Game where player copies a sequence of lights
-
-
     //Data class for a box
-    data class lightBox( val colour: Int )
-
-    //Enum of colours
-    enum class Colours{
-        RED,
-        BLUE,
-        YELLOW,
-        GREEN
-    }
-
-    //Empty arraylist for the sequence to copy
-    var sequence = ArrayList<Colours>()
+    data class LightBox( val colour: Int )
 
     @Composable
     fun PlayGame(modifier: Modifier, navController: NavController) {
         //Declare variables
         var playing by rememberSaveable { mutableStateOf(true) }
-        var someText by rememberSaveable { mutableStateOf("true") }
         val defaultColors = listOf(
             Color.Red,
             Color.Blue,
@@ -51,9 +40,12 @@ class SimonSays {
             Color.Green
         )
         val scope = rememberCoroutineScope()
+        //ArrayList for the sequence
+        var sequence by rememberSaveable { mutableStateOf(ArrayList<Int>()) }
+        var playerSequence by rememberSaveable { mutableStateOf(ArrayList<Int>()) }
 
         // State list of lightBoxes
-        var boxes by rememberSaveable { mutableStateOf(defaultColors.map {lightBox(it.toArgb())})}
+        var boxes by rememberSaveable { mutableStateOf(defaultColors.map {LightBox(it.toArgb())})}
 
         //Function to light up a box
         fun lightUp(index: Int) {
@@ -66,22 +58,115 @@ class SimonSays {
                 blue = (originalColor.blue + 1.5f).coerceAtMost(1f)
             ).toArgb()
 
-            //Launch coroutine
+            //Use a coroutine to light up the box as it uses a delay
             scope.launch {
                 //Set box colour to lightened color
-                boxes = boxes.toMutableList().also { it[index] = lightBox(lightened) }
+                boxes = boxes.toMutableList().also { it[index] = LightBox(lightened) }
 
-                //Wait for 500ms
-                delay(500)
+                //Wait for 300ms
+                delay(300)
 
                 // Set back to original color
-                boxes = boxes.toMutableList().also { it[index] = lightBox(originalColor.toArgb())}
+                boxes = boxes.toMutableList().also { it[index] = LightBox(originalColor.toArgb())}
             }
         }
 
         //Function to show the sequence to copy
-        fun showSequence(){
+        fun showSequence() {
+            //Set playing to false
+            playing = false
+            //Use a coroutine to light up the boxes as it uses a delay
+            scope.launch {
+                //For each step in the sequence
+                for (index in sequence) {
+                    //Light up the boxes in the sequence to copy with a delay
+                    lightUp(index)
+                    delay(700)
+                }
+                //Clear the player's sequence
+                playerSequence.clear()
+                //Set playing to true
+                playing = true
+            }
+        }
 
+        //Function to add a step to the sequence to copy
+        fun addStepToSequence() {
+            val newStep = (0..3).random()
+            sequence = (sequence + newStep) as ArrayList<Int>
+        }
+
+        //Function to show a dialog box when the game ends
+        fun showDialog(){
+            //Display a dialog to show the result
+            Dialog(onDismissRequest = {}) {
+                //Card to show the result
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Column(){
+                        //Text to show the result
+                        Text(
+                            text = "Game Over",
+                            modifier = Modifier
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center,
+                        )
+                        //Row of buttons to either go back to the home page or play again
+                        Row(){
+                            //Button to go back to the home page
+                            Button(
+                                onClick = { navController.navigate("MainMenu") },
+                            ) {
+                                Text("Home")
+                            }
+                            //Button to play again
+                            Button(
+                                onClick = {
+                                    //Reset the game
+                                }
+                            ){
+                                Text("Play Again")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Function to define the behaviour of each button
+        fun buttonClicked(index: Int){
+            //If playing is true
+            if (playing) {
+                //Light up the box that has been clicked
+                lightUp(index)
+                //Add the box to the player's sequence
+                playerSequence.add(index)
+
+                //Check if the player's sequence matches the sequence
+                val index = playerSequence.lastIndex
+                if (playerSequence[index] != sequence[index]) {
+                    //Set playing to false if the wrong box is pressed
+                    playing = false
+                    //Show the end game dialog
+                    showDialog()
+                }
+                //If the sequences match
+                else if (playerSequence.size == sequence.size) {
+                    //Set playing to false
+                    playing = false
+                    //Start the next round
+                    scope.launch {
+                        delay(1000)
+                        addStepToSequence()
+                        showSequence()
+                    }
+                }
+            }
         }
 
         //Column to hold the game
@@ -101,8 +186,8 @@ class SimonSays {
                         .size(100.dp)
                         .background(Color(boxes[0].colour))
                         .clickable {
-                            //Lighten the colour of the box
-                            lightUp(0)
+                            //Lighten the colour of the box if playing
+                            buttonClicked(0)
                         }
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -112,7 +197,7 @@ class SimonSays {
                         .background(Color(boxes[1].colour))
                         .clickable {
                             //Lighten the colour of the box
-                            lightUp(1)
+                            buttonClicked(1)
                         }
                 )
             }
@@ -132,22 +217,28 @@ class SimonSays {
                         .background(Color(boxes[2].colour))
                         .clickable {
                             //Lighten the colour of the box
-                            lightUp(2)
-                        }                )
+                            buttonClicked(2)
+                        }
+                )
                 Spacer(modifier = Modifier.width(8.dp))
                 Box(
                     modifier = Modifier
                         .size(100.dp)
                         .background(Color(boxes[3].colour))
                         .clickable {
-                            lightUp(3)
+                            buttonClicked(3)
                         }
                 )
             }
-            Text(
-                modifier = Modifier.padding(10.dp),
-                text = someText
-            )
+            Button(onClick = {
+                sequence.clear()
+                playerSequence.clear()
+                addStepToSequence()
+                showSequence()
+            }) {
+                Text("Start Game")
+            }
+
         }
     }
 }
