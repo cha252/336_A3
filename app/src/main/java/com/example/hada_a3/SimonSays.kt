@@ -33,6 +33,7 @@ class SimonSays {
     fun PlayGame(modifier: Modifier, navController: NavController) {
         //Declare variables
         var playing by rememberSaveable { mutableStateOf(true) }
+        var lost by rememberSaveable { mutableStateOf(false) }
         val defaultColors = listOf(
             Color.Red,
             Color.Blue,
@@ -96,48 +97,6 @@ class SimonSays {
             sequence = (sequence + newStep) as ArrayList<Int>
         }
 
-        //Function to show a dialog box when the game ends
-        fun showDialog(){
-            //Display a dialog to show the result
-            Dialog(onDismissRequest = {}) {
-                //Card to show the result
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(16.dp),
-                    shape = RoundedCornerShape(16.dp),
-                ) {
-                    Column(){
-                        //Text to show the result
-                        Text(
-                            text = "Game Over",
-                            modifier = Modifier
-                                .wrapContentSize(Alignment.Center),
-                            textAlign = TextAlign.Center,
-                        )
-                        //Row of buttons to either go back to the home page or play again
-                        Row(){
-                            //Button to go back to the home page
-                            Button(
-                                onClick = { navController.navigate("MainMenu") },
-                            ) {
-                                Text("Home")
-                            }
-                            //Button to play again
-                            Button(
-                                onClick = {
-                                    //Reset the game
-                                }
-                            ){
-                                Text("Play Again")
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         //Function to define the behaviour of each button
         fun buttonClicked(index: Int){
             //If playing is true
@@ -152,8 +111,8 @@ class SimonSays {
                 if (playerSequence[index] != sequence[index]) {
                     //Set playing to false if the wrong box is pressed
                     playing = false
-                    //Show the end game dialog
-                    showDialog()
+                    //Set lost to true
+                    lost = true
                 }
                 //If the sequences match
                 else if (playerSequence.size == sequence.size) {
@@ -238,7 +197,47 @@ class SimonSays {
             }) {
                 Text("Start Game")
             }
-
+        }
+        if(lost){
+            //Display a dialog to show the result
+            Dialog(onDismissRequest = {}) {
+                //Card to show the result
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Column(){
+                        //Text to show the result
+                        Text(
+                            text = "Game Over",
+                            modifier = Modifier
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center,
+                        )
+                        //Row of buttons to either go back to the home page or play again
+                        Row(){
+                            //Button to go back to the home page
+                            Button(
+                                onClick = { navController.navigate("MainMenu") },
+                            ) {
+                                Text("Home")
+                            }
+                            //Button to play again
+                            Button(
+                                onClick = {
+                                    //Reset the game
+                                    lost = false
+                                }
+                            ){
+                                Text("Play Again")
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
