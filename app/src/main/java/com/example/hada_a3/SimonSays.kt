@@ -228,7 +228,7 @@ class SimonSays {
                         .fillMaxWidth()
                         .height(200.dp)
                         .padding(16.dp),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(){
                         if(round > hiScore){ hiScore = round }
@@ -237,7 +237,7 @@ class SimonSays {
                             text = "Game Over\nGot to Round $round\nHi-Score: $hiScore",
                             modifier = Modifier
                                 .wrapContentSize(Alignment.Center),
-                            textAlign = TextAlign.Center,
+                            textAlign = TextAlign.Center
                         )
                         //Row of buttons to either go back to the home page or play again
                         Row(){

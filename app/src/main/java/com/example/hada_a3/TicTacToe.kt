@@ -2,9 +2,11 @@ package com.example.hada_a3
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -109,62 +111,64 @@ class TicTacToe{
         }
 
         //Column to hold the UI of the game
+        //Column to hold the game
         Column(
-            modifier = modifier
+            modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ){
-            //Box to display the score and which player's turn it is
-            Box(
-                modifier = Modifier
-                    .weight(0.2f)
-                    .fillMaxSize()
+            //Row to display the score and which player's turn it is
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ){
-                Row(){
-                    //Display player 1's score
-                    Text(
-                        "Player 1 Score: $p1Score",
-                        modifier = Modifier
-                            .weight(0.5f)
-                            .align(CenterVertically),
-                        textAlign = TextAlign.Start
-                    )
+                //Display player 1's score
+                Text(
+                    "Player 1 Score: $p1Score",
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .align(CenterVertically),
+                    textAlign = TextAlign.Start
+                )
 
-                    //Display which player's turn it is
-                    var playerTurnString = "X's Turn"
-                    if(p1Turn) { playerTurnString = "X's Turn" }
-                    else{ playerTurnString = "O's Turn" }
-                    Text(
-                        playerTurnString,
-                        modifier = Modifier
-                            .weight(0.5f)
-                            .align(CenterVertically),
-                        textAlign = TextAlign.Center
-                    )
+                //Display which player's turn it is
+                var playerTurnString = "X's Turn"
+                if(p1Turn) { playerTurnString = "X's Turn" }
+                else{ playerTurnString = "O's Turn" }
+                Text(
+                    playerTurnString,
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .align(CenterVertically),
+                    textAlign = TextAlign.Center
+                )
 
-                    //Display player 2's score
-                    Text(
-                        "Player 2 Score: $p2Score",
-                        modifier = Modifier
-                            .weight(0.5f)
-                            .align(CenterVertically),
-                        textAlign = TextAlign.End
-                    )
-                }
+                //Display player 2's score
+                Text(
+                    "Player 2 Score: $p2Score",
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .align(CenterVertically),
+                    textAlign = TextAlign.End
+                )
             }
+
+            //Add a spacer
+            Spacer(modifier = Modifier.height(30.dp))
 
             //Row to hold the game itself
             Row(
-                modifier = Modifier
-                    .weight(0.5f)
-                    .padding(80.dp)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
             ){
                 //Draw the grid
-                Column(){
+                Column(
+                    verticalArrangement = Arrangement.Center
+                ){
                     for (i in 0..2) {
                         //Rows of buttons
                         Row(
-                            Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .weight(0.1f)
+                            horizontalArrangement = Arrangement.Center
                         ) {
                             for (j in 0..2) {
                                 //Calculate the index of the box
@@ -175,8 +179,6 @@ class TicTacToe{
                                         .border(2.dp, Color.White, RectangleShape)
                                         .width(100.dp)
                                         .height(100.dp)
-                                        .align(Alignment.CenterVertically)
-                                        .weight(0.33f)
                                         .clickable {
                                             boxClicked(index);
                                         }
@@ -201,11 +203,6 @@ class TicTacToe{
                     }
                 }
             }
-            //Box to fill space at bottom
-            Box(
-                modifier = Modifier
-                    .weight(0.3f)
-            )
         }
 
         //If either of the players has won or the board is full
@@ -224,7 +221,7 @@ class TicTacToe{
                         .fillMaxWidth()
                         .height(200.dp)
                         .padding(16.dp),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Column(){
                         //Text to show the result
@@ -232,7 +229,7 @@ class TicTacToe{
                             text = alertText,
                             modifier = Modifier
                                 .wrapContentSize(Alignment.Center),
-                            textAlign = TextAlign.Center,
+                            textAlign = TextAlign.Center
                         )
                         //Row of buttons to either go back to the home page or play again
                         Row(){
