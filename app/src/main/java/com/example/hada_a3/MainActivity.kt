@@ -51,7 +51,7 @@ val gameList = listOf(
     "TicTacToe",
     "SimonSays",
     "Wires",
-
+    "Numbers"
 )
 
 @Composable
@@ -114,6 +114,7 @@ fun UI(modifier: Modifier = Modifier){
         composable("TicTacToe") { TicTacToe().PlayGame(modifier, navController) }
         composable("SimonSays") { SimonSays().PlayGame(modifier, navController) }
         composable("Wires") { Wires().PlayGame(modifier, navController) }
+        composable("Numbers") { Numbers().PlayGame(modifier, navController) }
 
     })
 }
