@@ -25,8 +25,10 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+//Simon says game
 class SimonSays {
     //Game where player copies a sequence of lights
+
     //Data class for a box
     data class LightBox( val colour: Int )
 
@@ -203,8 +205,9 @@ class SimonSays {
             }
             Spacer(modifier = Modifier.height(30.dp))
 
-            //If lost is true
+            //If the game has not started
             if(!started){
+                //Show the button
                 Button(onClick = {
                     //Initialise game variables
                     sequence.clear()
@@ -218,9 +221,9 @@ class SimonSays {
                 }
             }
         }
-        //If lost is true
+        //If the game is over
         if(gameOver){
-            //Display a dialog to show the result
+            //Display a dialog to show the result - modified version of the minimal dialog from https://developer.android.com/develop/ui/compose/components/dialog
             Dialog(onDismissRequest = {}) {
                 //Card to show the result
                 Card(
@@ -230,7 +233,12 @@ class SimonSays {
                         .padding(16.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Column(){
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        //Update hi score
                         if(round > hiScore){ hiScore = round }
                         //Text to show the result
                         Text(
@@ -239,6 +247,8 @@ class SimonSays {
                                 .wrapContentSize(Alignment.Center),
                             textAlign = TextAlign.Center
                         )
+                        //Add a spacer between the text and buttons
+                        Spacer(modifier = Modifier.height(30.dp))
                         //Row of buttons to either go back to the home page or play again
                         Row(){
                             //Button to go back to the home page
@@ -252,6 +262,8 @@ class SimonSays {
                             ) {
                                 Text("Home")
                             }
+                            //Add a spacer between the buttons
+                            Spacer(modifier = Modifier.width(30.dp))
                             //Button to play again
                             Button(
                                 //Set lost and started to false

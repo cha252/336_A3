@@ -37,9 +37,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 
+//Tic Tac Toe game
 class TicTacToe{
     //Function to check if a game state is a winning game state or not
     fun checkWin(winningStates: Array<Array<Int>>, playerGrid: Array<Int>): Boolean {
+        //Check if either of the players has won
         return winningStates.any { winningState ->
             winningState.indices.all { i -> winningState[i] == 0 || playerGrid[i] == 1 }
         }
@@ -110,7 +112,6 @@ class TicTacToe{
             }
         }
 
-        //Column to hold the UI of the game
         //Column to hold the game
         Column(
             modifier = modifier.fillMaxSize(),
@@ -165,8 +166,8 @@ class TicTacToe{
                 Column(
                     verticalArrangement = Arrangement.Center
                 ){
+                    //Draw the grid of boxes
                     for (i in 0..2) {
-                        //Rows of buttons
                         Row(
                             horizontalArrangement = Arrangement.Center
                         ) {
@@ -179,12 +180,10 @@ class TicTacToe{
                                         .border(2.dp, Color.White, RectangleShape)
                                         .width(100.dp)
                                         .height(100.dp)
-                                        .clickable {
-                                            boxClicked(index);
-                                        }
+                                        .clickable { boxClicked(index) }
                                 ) {
+                                    //Set the contents of the grid cell when clicked
                                     when (gameGrid[index]) {
-                                        //Set the contents of the grid cell when clicked
                                         1 -> Icon(
                                             Icons.Default.Close,
                                             contentDescription = "X",
@@ -213,7 +212,7 @@ class TicTacToe{
             else if(p2Win){ alertText = "Player 2 Wins!" }
             else{ alertText = "Draw!" }
 
-            //Display a dialog to show the result
+            //Display a dialog to show the result - modified version of the minimal dialog from https://developer.android.com/develop/ui/compose/components/dialog
             Dialog(onDismissRequest = {}) {
                 //Card to show the result
                 Card(
@@ -223,7 +222,11 @@ class TicTacToe{
                         .padding(16.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Column(){
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ){
                         //Text to show the result
                         Text(
                             text = alertText,
@@ -231,6 +234,8 @@ class TicTacToe{
                                 .wrapContentSize(Alignment.Center),
                             textAlign = TextAlign.Center
                         )
+                        //Add a spacer between the text and buttons
+                        Spacer(modifier = Modifier.height(30.dp))
                         //Row of buttons to either go back to the home page or play again
                         Row(){
                             //Button to go back to the home page
@@ -246,6 +251,8 @@ class TicTacToe{
                             ){
                                 Text("Home")
                             }
+                            //Add a spacer between the buttons
+                            Spacer(modifier = Modifier.width(30.dp))
                             //Button to play again
                             Button(
                                 onClick = {

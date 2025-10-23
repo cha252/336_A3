@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 
+//Numbers game
 class Numbers {
     //4x4 Grid of numbers that randomly shuffles
     //Goal of the game is to press the numbers in order (they disappear after tile 16-level)
@@ -164,7 +165,7 @@ class Numbers {
         }
         //If lost is true
         if(gameOver){
-            //Display a dialog to show the result
+            //Display a dialog to show the result - modified version of the minimal dialog from https://developer.android.com/develop/ui/compose/components/dialog
             Dialog(onDismissRequest = {}) {
                 //Card to show the result
                 Card(
@@ -174,7 +175,12 @@ class Numbers {
                         .padding(16.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Column(){
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        //Update hi score
                         if(level > hiScore){ hiScore = level }
                         //Text to show the result
                         Text(
@@ -183,6 +189,8 @@ class Numbers {
                                 .wrapContentSize(Alignment.Center),
                             textAlign = TextAlign.Center
                         )
+                        //Add a spacer between the text and buttons
+                        Spacer(modifier = Modifier.height(30.dp))
                         //Row of buttons to either go back to the home page or play again
                         Row(){
                             //Button to go back to the home page
@@ -196,6 +204,8 @@ class Numbers {
                             ) {
                                 Text("Home")
                             }
+                            //Add a spacer between the buttons
+                            Spacer(modifier = Modifier.width(30.dp))
                             //Button to play again
                             Button(
                                 //Set game over to false and level to 0
