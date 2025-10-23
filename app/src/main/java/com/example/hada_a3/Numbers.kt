@@ -50,7 +50,7 @@ class Numbers {
         //Make list of 16 numbers
         var numbers by rememberSaveable { mutableStateOf((1..16).toList().shuffled()) }
         //Map of the numbers and whether the number has been clicked or not
-//        var clicked by rememberSaveable { mutableStateOf(Array(16) { false }) }
+        var clicked by rememberSaveable { mutableStateOf(Array(16) { false }) }
 
         //Function to set the next round
         fun nextRound(){
@@ -58,6 +58,8 @@ class Numbers {
             nextClick = 1
             //Reshuffle the numbers
             numbers = numbers.shuffled()
+            //Reset the clicked array
+            clicked = Array(16) { false }
             //Increment level
             level++
         }
@@ -73,6 +75,8 @@ class Numbers {
                         //Start next round
                         nextRound()
                     }else{
+                        //Set clicked box to true
+                        clicked[index] = true
                         //Increment nextClick
                         nextClick++
                     }
@@ -126,6 +130,7 @@ class Numbers {
                                         .border(2.dp, Color.White, RectangleShape)
                                         .width(75.dp)
                                         .height(75.dp)
+                                        .background(if(clicked[i * 4 + j]) Color.DarkGray else Color.Black)
                                         .clickable {
                                             checkClick(i * 4 + j)
                                         },
