@@ -150,6 +150,7 @@ class Numbers {
                     }
                 }
             }
+
             //Add a spacer
             Spacer(Modifier.height(30.dp))
 
@@ -162,6 +163,13 @@ class Numbers {
                     }
                 ) {
                     Text("Start")
+                }
+            }else{
+                //Otherwise add a home button
+                Button(
+                    onClick = { navController.navigate("MainMenu") }
+                ){
+                    Text("Home")
                 }
             }
         }

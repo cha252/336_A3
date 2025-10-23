@@ -145,6 +145,10 @@ class SimonSays {
                 //Text to show the round
                 Text(text = "Round: $round")
             }
+            //If game is not started show a dash for the round
+            else{
+                Text(text = "Round: -")
+            }
             //Add a spacer
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -218,6 +222,14 @@ class SimonSays {
                     showSequence()
                 }) {
                     Text("Start Game")
+                }
+            }
+            else{
+                //Add a home button
+                Button(
+                    onClick = { navController.navigate("MainMenu") }
+                ){
+                    Text("Home")
                 }
             }
         }

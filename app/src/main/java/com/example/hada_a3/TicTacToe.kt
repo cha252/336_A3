@@ -202,6 +202,14 @@ class TicTacToe{
                     }
                 }
             }
+            //Add a spacer
+            Spacer(modifier = Modifier.height(30.dp))
+            //Add a home button
+            Button(
+                onClick = { navController.navigate("MainMenu") }
+            ){
+                Text("Home")
+            }
         }
 
         //If either of the players has won or the board is full
