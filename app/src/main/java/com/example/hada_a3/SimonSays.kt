@@ -38,6 +38,7 @@ class SimonSays {
         var playing by rememberSaveable { mutableStateOf(false) }
         var gameOver by rememberSaveable { mutableStateOf(false) }
         var started by rememberSaveable { mutableStateOf(false) }
+        var paused by rememberSaveable { mutableStateOf(false) }
         var round by rememberSaveable { mutableIntStateOf(0) }
         var hiScore by rememberSaveable { mutableIntStateOf(0) }
         val defaultColors = listOf(
@@ -227,14 +228,14 @@ class SimonSays {
             else{
                 //Add a home button
                 Button(
-                    onClick = { navController.navigate("MainMenu") }
+                    onClick = { paused = true }
                 ){
-                    Text("Home")
+                    Text("Pause")
                 }
             }
         }
-        //If the game is over
-        if(gameOver){
+        //If game over or paused
+        if(gameOver || paused){
             //Display a dialog to show the result - modified version of the minimal dialog from https://developer.android.com/develop/ui/compose/components/dialog
             Dialog(onDismissRequest = {}) {
                 //Card to show the result
@@ -250,15 +251,28 @@ class SimonSays {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ){
-                        //Update hi score
-                        if(round > hiScore){ hiScore = round }
-                        //Text to show the result
-                        Text(
-                            text = "Game Over\nGot to Round $round\nHi-Score: $hiScore",
-                            modifier = Modifier
-                                .wrapContentSize(Alignment.Center),
-                            textAlign = TextAlign.Center
-                        )
+                        //If the game is over
+                        if(gameOver){
+                            //Update hi score
+                            if(round > hiScore){ hiScore = round }
+                            //Text to show the result
+                            Text(
+                                text = "Game Over\nGot to Round $round\nHi-Score: $hiScore",
+                                modifier = Modifier
+                                    .wrapContentSize(Alignment.Center),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        //If the game is paused
+                        else{
+                            //Add paused text
+                            Text(
+                                text = "Paused",
+                                modifier = Modifier
+                                    .wrapContentSize(Alignment.Center),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                         //Add a spacer between the text and buttons
                         Spacer(modifier = Modifier.height(30.dp))
                         //Row of buttons to either go back to the home page or play again
@@ -266,7 +280,8 @@ class SimonSays {
                             //Button to go back to the home page
                             Button(
                                 onClick = {
-                                    //Set game over to false so that the dialog disappears when the button is clicked
+                                    //Set booleans to false so that the dialog disappears when the button is clicked
+                                    paused = false
                                     gameOver = false
                                     //Navigate back to the home page
                                     navController.navigate("MainMenu")
@@ -280,12 +295,26 @@ class SimonSays {
                             Button(
                                 //Set lost and started to false
                                 onClick = {
-                                    started = false
-                                    gameOver = false
-                                    round = 0
+                                    //If the game is paused
+                                    if(paused){
+                                        //Set paused to false
+                                        paused = false
+                                    }
+                                    else{
+                                        started = false
+                                        gameOver = false
+                                        round = 0
+                                    }
                                 }
                             ){
-                                Text("Play Again")
+                                //If the game is paused
+                                if(paused){
+                                    Text("Continue")
+                                }
+                                //If the game is over
+                                else{
+                                    Text("Play Again")
+                                }
                             }
                         }
                     }

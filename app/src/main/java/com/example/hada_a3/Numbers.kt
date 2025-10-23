@@ -44,6 +44,7 @@ class Numbers {
         var nextClick by rememberSaveable { mutableIntStateOf(1) }
         var gameOver by rememberSaveable { mutableStateOf(false) }
         var started by rememberSaveable { mutableStateOf(false) }
+        var paused by rememberSaveable { mutableStateOf(false) }
 
         //Make list of 16 numbers
         var numbers by rememberSaveable { mutableStateOf((1..16).toList().shuffled()) }
@@ -165,16 +166,16 @@ class Numbers {
                     Text("Start")
                 }
             }else{
-                //Otherwise add a home button
+                //Otherwise add a pause button
                 Button(
-                    onClick = { navController.navigate("MainMenu") }
+                    onClick = { paused = true }
                 ){
-                    Text("Home")
+                    Text("Pause")
                 }
             }
         }
-        //If lost is true
-        if(gameOver){
+        //If game over or paused is true
+        if(gameOver || paused){
             //Display a dialog to show the result - modified version of the minimal dialog from https://developer.android.com/develop/ui/compose/components/dialog
             Dialog(onDismissRequest = {}) {
                 //Card to show the result
@@ -190,15 +191,27 @@ class Numbers {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ){
-                        //Update hi score
-                        if(level > hiScore){ hiScore = level }
-                        //Text to show the result
-                        Text(
-                            text = "Game Over\nGot to Level $level\nHi-Score: $hiScore",
-                            modifier = Modifier
-                                .wrapContentSize(Alignment.Center),
-                            textAlign = TextAlign.Center
-                        )
+                        //If the game is over
+                        if(gameOver){
+                            //Update hi score
+                            if(level > hiScore){ hiScore = level }
+                            //Text to show the result
+                            Text(
+                                text = "Game Over\nGot to Level $level\nHi-Score: $hiScore",
+                                modifier = Modifier
+                                    .wrapContentSize(Alignment.Center),
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        //If game is paused
+                        else{
+                            Text(
+                                text = "Paused",
+                                modifier = Modifier
+                                    .wrapContentSize(Alignment.Center),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                         //Add a spacer between the text and buttons
                         Spacer(modifier = Modifier.height(30.dp))
                         //Row of buttons to either go back to the home page or play again
@@ -206,9 +219,10 @@ class Numbers {
                             //Button to go back to the home page
                             Button(
                                 onClick = {
-                                    //Set game over to false so that the dialog disappears when the button is clicked
+                                    //Set booleans to false so that the dialog disappears when the button is clicked
                                     gameOver = false
-                                        //Navigate back to the home page
+                                    paused = false
+                                    //Navigate back to the home page
                                     navController.navigate("MainMenu")
                                 }
                             ) {
@@ -219,9 +233,25 @@ class Numbers {
                             //Button to play again
                             Button(
                                 //Set game over to false and level to 0
-                                onClick = { startGame()   }
+                                onClick = {
+                                    //If game is over
+                                    if(gameOver){
+                                        //Reset the game
+                                        startGame()
+                                    }
+                                    //If the home button is pressed
+                                    else{
+                                        //Set paused to false
+                                        paused = false
+                                    }
+                                }
                             ){
-                                Text("Play Again")
+                                //Change text based on whether game over or home button
+                                if(gameOver){
+                                    Text("Play Again")
+                                }else{
+                                    Text("Continue")
+                                }
                             }
                         }
                     }

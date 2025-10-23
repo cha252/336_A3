@@ -59,6 +59,7 @@ class TicTacToe{
         var p1Win by rememberSaveable { mutableStateOf(false) }
         var p2Win by rememberSaveable { mutableStateOf(false) }
         var draw by rememberSaveable { mutableStateOf(false) }
+        var paused by rememberSaveable { mutableStateOf(false) }
 
         //Winning states for either player where 1 is their tile and 0 is  anything else
         val winningStates = arrayOf(
@@ -206,19 +207,20 @@ class TicTacToe{
             Spacer(modifier = Modifier.height(30.dp))
             //Add a home button
             Button(
-                onClick = { navController.navigate("MainMenu") }
+                onClick = { paused = true }
             ){
-                Text("Home")
+                Text("Pause")
             }
         }
 
         //If either of the players has won or the board is full
-        if(p1Win || p2Win || draw){
+        if(p1Win || p2Win || draw || paused){
             //Set the text for the alert dialog
             var alertText = ""
             if(p1Win){ alertText = "Player 1 Wins!" }
             else if(p2Win){ alertText = "Player 2 Wins!" }
-            else{ alertText = "Draw!" }
+            else if(draw){ alertText = "Draw!" }
+            else{ alertText = "Paused" }
 
             //Display a dialog to show the result - modified version of the minimal dialog from https://developer.android.com/develop/ui/compose/components/dialog
             Dialog(onDismissRequest = {}) {
@@ -250,6 +252,7 @@ class TicTacToe{
                             Button(
                                 onClick = {
                                     //Set booleans to false so that the dialog disappears when the button is clicked
+                                    paused = false
                                     p1Win = false
                                     p2Win = false
                                     draw = false
@@ -264,17 +267,33 @@ class TicTacToe{
                             //Button to play again
                             Button(
                                 onClick = {
-                                    //Reset the game
-                                    p1Win = false
-                                    p2Win = false
-                                    draw = false
-                                    gameGrid = Array(9) { 0 }
-                                    p1Grid = Array(9) { 0 }
-                                    p2Grid = Array(9) { 0 }
-                                    totalTurns = 0
+                                    //If game is paused
+                                    if(paused){
+                                        //Set paused to false
+                                        paused = false
+                                    }
+                                    //If the game has ended
+                                    else{
+                                        //Reset the game
+                                        p1Win = false
+                                        p2Win = false
+                                        draw = false
+                                        gameGrid = Array(9) { 0 }
+                                        p1Grid = Array(9) { 0 }
+                                        p2Grid = Array(9) { 0 }
+                                        totalTurns = 0
+                                    }
                                 }
                             ){
-                                Text("Play Again")
+                                //If game is paused
+                                if(paused){
+                                    //Show continue text
+                                    Text("Continue")
+                                }
+                                else {
+                                    //Otherwise show play again text
+                                    Text("Play Again")
+                                }
                             }
                         }
                     }
