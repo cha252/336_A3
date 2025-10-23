@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
 val gameList = listOf(
     "TicTacToe",
     "SimonSays",
-    "Wires",
+    "ConnectFour",
     "Numbers"
 )
 
@@ -113,9 +113,7 @@ fun UI(modifier: Modifier = Modifier){
         //Define each game's game screen composable
         composable("TicTacToe") { TicTacToe().PlayGame(modifier, navController) }
         composable("SimonSays") { SimonSays().PlayGame(modifier, navController) }
-        composable("Wires") { Wires().PlayGame(modifier, navController) }
         composable("Numbers") { Numbers().PlayGame(modifier, navController) }
-
     })
 }
 
