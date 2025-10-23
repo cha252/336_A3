@@ -36,8 +36,6 @@ import androidx.navigation.NavController
 //Numbers game
 class Numbers {
     //4x4 Grid of numbers that randomly shuffles
-    //Goal of the game is to press the numbers in order (they disappear after tile 16-level)
-
     @Composable
     fun PlayGame(modifier: Modifier, navController: NavController) {
         //Declare variables
@@ -82,7 +80,11 @@ class Numbers {
                     }
                 }
                 else {
-                    gameOver = true
+                    //If the box has not already been clicked
+                    if(!clicked[index]) {
+                        //Set game over to true
+                        gameOver = true
+                    }
                 }
             }
         }
