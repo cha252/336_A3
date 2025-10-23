@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.hada_a3.ui.theme.Hada_A3Theme
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,6 +25,10 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -66,14 +71,21 @@ fun TitlePage(modifier: Modifier = Modifier, navController: NavController) {
             modifier = Modifier
                 .border(2.dp, Color.White, shape = RoundedCornerShape(10.dp))
                 .fillMaxWidth()
+                .background(Color.Black)
                 .height(150.dp)
                 .padding(10.dp)
         ){
+            //Title for the games app
             Text(
-                "Games App",
+                text = "Games App",
                 modifier = Modifier
                     .padding(10.dp)
-                    .align(Alignment.Center)
+                    .align(Alignment.Center),
+                fontSize = 48.sp,
+                style = TextStyle(
+                    color = Color.White,
+                    fontFamily = FontFamily(Font(R.font.ocr_a))
+                )
             )
         }
         //Use a lazy vertical grid to show thumbnails of each game
