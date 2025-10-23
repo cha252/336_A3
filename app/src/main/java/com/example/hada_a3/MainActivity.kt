@@ -17,6 +17,7 @@ import com.example.hada_a3.ui.theme.Hada_A3Theme
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -88,7 +89,8 @@ fun TitlePage(modifier: Modifier = Modifier, navController: NavController) {
                     modifier = modifier
                         .fillMaxWidth()
                         .height(250.dp)
-                        .width(250.dp),
+                        .width(250.dp)
+                        .clickable{navController.navigate(name)},
                     painter = painterResource(
                         when(name){
                             "Tic Tac Toe"-> R.drawable.tic_tac_toe
@@ -111,9 +113,9 @@ fun UI(modifier: Modifier = Modifier){
         //Define the main menu composable
         composable("MainMenu"){ TitlePage(modifier, navController) }
         //Define each game's game screen composable
-        composable("tic_tac_toe") { TicTacToe().PlayGame(modifier, navController) }
-        composable("simon_says") { SimonSays().PlayGame(modifier, navController) }
-        composable("numbers") { Numbers().PlayGame(modifier, navController) }
+        composable("Tic Tac Toe") { TicTacToe().PlayGame(modifier, navController) }
+        composable("Simon Says") { SimonSays().PlayGame(modifier, navController) }
+        composable("Numbers") { Numbers().PlayGame(modifier, navController) }
     })
 }
 

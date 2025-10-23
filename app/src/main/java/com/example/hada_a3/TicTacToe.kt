@@ -235,8 +235,15 @@ class TicTacToe{
                         Row(){
                             //Button to go back to the home page
                             Button(
-                                onClick = { navController.navigate("MainMenu") },
-                            ) {
+                                onClick = {
+                                    //Set booleans to false so that the dialog disappears when the button is clicked
+                                    p1Win = false
+                                    p2Win = false
+                                    draw = false
+                                    //Navigate back to the home page
+                                    navController.navigate("MainMenu")
+                                }
+                            ){
                                 Text("Home")
                             }
                             //Button to play again

@@ -187,7 +187,12 @@ class Numbers {
                         Row(){
                             //Button to go back to the home page
                             Button(
-                                onClick = { navController.navigate("MainMenu") }
+                                onClick = {
+                                    //Set game over to false so that the dialog disappears when the button is clicked
+                                    gameOver = false
+                                        //Navigate back to the home page
+                                    navController.navigate("MainMenu")
+                                }
                             ) {
                                 Text("Home")
                             }

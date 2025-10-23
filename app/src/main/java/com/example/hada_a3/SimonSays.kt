@@ -34,7 +34,7 @@ class SimonSays {
     fun PlayGame(modifier: Modifier, navController: NavController) {
         //Declare variables
         var playing by rememberSaveable { mutableStateOf(false) }
-        var lost by rememberSaveable { mutableStateOf(false) }
+        var gameOver by rememberSaveable { mutableStateOf(false) }
         var started by rememberSaveable { mutableStateOf(false) }
         var round by rememberSaveable { mutableIntStateOf(0) }
         var hiScore by rememberSaveable { mutableIntStateOf(0) }
@@ -116,7 +116,7 @@ class SimonSays {
                     //Set playing to false if the wrong box is pressed
                     playing = false
                     //Set lost to true
-                    lost = true
+                    gameOver = true
                 }
                 //If the sequences match
                 else if (playerSequence.size == sequence.size) {
@@ -219,7 +219,7 @@ class SimonSays {
             }
         }
         //If lost is true
-        if(lost){
+        if(gameOver){
             //Display a dialog to show the result
             Dialog(onDismissRequest = {}) {
                 //Card to show the result
@@ -243,7 +243,12 @@ class SimonSays {
                         Row(){
                             //Button to go back to the home page
                             Button(
-                                onClick = { navController.navigate("MainMenu") }
+                                onClick = {
+                                    //Set game over to false so that the dialog disappears when the button is clicked
+                                    gameOver = false
+                                    //Navigate back to the home page
+                                    navController.navigate("MainMenu")
+                                }
                             ) {
                                 Text("Home")
                             }
@@ -252,7 +257,7 @@ class SimonSays {
                                 //Set lost and started to false
                                 onClick = {
                                     started = false
-                                    lost = false
+                                    gameOver = false
                                     round = 0
                                 }
                             ){
