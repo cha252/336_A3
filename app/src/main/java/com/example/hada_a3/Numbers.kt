@@ -1,5 +1,6 @@
 package com.example.hada_a3
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.SnapPosition
@@ -28,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -45,12 +45,12 @@ class Numbers {
         var hiScore by rememberSaveable { mutableIntStateOf(0) }
         var nextClick by rememberSaveable { mutableIntStateOf(1) }
         var gameOver by rememberSaveable { mutableStateOf(false) }
+        var started by rememberSaveable { mutableStateOf(false) }
+
         //Make list of 16 numbers
         var numbers by rememberSaveable { mutableStateOf((1..16).toList().shuffled()) }
         //Map of the numbers and whether the number has been clicked or not
-        var clicked by rememberSaveable { mutableStateOf(Array(16) { false }) }
-
-
+//        var clicked by rememberSaveable { mutableStateOf(Array(16) { false }) }
 
         //Function to set the next round
         fun nextRound(){
@@ -64,19 +64,22 @@ class Numbers {
 
         //Function to check which box has been clicked
         fun checkClick(index: Int) {
-            //If clicked box contains number of next click
-            if(numbers[index] == nextClick){
-                //If next click is 16
-                if(nextClick == 16) {
-                    //Start next round
-                    nextRound()
-                }else{
-                    //Increment nextClick
-                    nextClick++
+            //Only react to a click if the game has been started
+            if(started){
+                //If clicked box contains number of next click
+                if(numbers[index] == nextClick){
+                    //If next click is 16
+                    if(nextClick == 16) {
+                        //Start next round
+                        nextRound()
+                    }else{
+                        //Increment nextClick
+                        nextClick++
+                    }
                 }
-            }
-            else{
-                gameOver = true
+                else {
+                    gameOver = true
+                }
             }
         }
 
@@ -86,6 +89,7 @@ class Numbers {
             level = 0
             nextClick = 1
             gameOver = false
+            started = true
             //Shuffle the numbers
             numbers = numbers.shuffled()
             //Set up first round
@@ -129,7 +133,7 @@ class Numbers {
 
                                 ) {
                                     var boxText = ""
-                                    if(nextClick < 16-level){
+                                    if((nextClick < 16-level)&&started){
                                         boxText = numbers[i * 4 + j].toString()
                                     }
                                     Text(boxText)
@@ -141,13 +145,17 @@ class Numbers {
             }
             //Add a spacer
             Spacer(Modifier.height(30.dp))
-            //Button to refresh the numbers
-            Button(
-                onClick = {
-                    startGame()
+
+            //If the game has not been started
+            if(!started){
+                //Button to start the game
+                Button(
+                    onClick = {
+                        startGame()
+                    }
+                ) {
+                    Text("Start")
                 }
-            ) {
-                Text("Start")
             }
         }
         //If lost is true
