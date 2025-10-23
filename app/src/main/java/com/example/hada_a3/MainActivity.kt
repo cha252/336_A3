@@ -15,12 +15,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hada_a3.ui.theme.Hada_A3Theme
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -48,10 +50,9 @@ class MainActivity : ComponentActivity() {
 
 //List for the names of the games
 val gameList = listOf(
-    "TicTacToe",
-    "SimonSays",
-    "ConnectFour",
-    "Numbers"
+    "Tic Tac Toe",
+    "Numbers",
+    "Simon Says"
 )
 
 @Composable
@@ -62,10 +63,10 @@ fun TitlePage(modifier: Modifier = Modifier, navController: NavController) {
         //Display title
         Box(
             modifier = Modifier
-                .border(2.dp, Color.White, shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
+                .border(2.dp, Color.White, shape = RoundedCornerShape(10.dp))
                 .fillMaxWidth()
+                .height(150.dp)
                 .padding(10.dp)
-                .weight(1.2f)
         ){
             Text(
                 "Games App",
@@ -78,28 +79,27 @@ fun TitlePage(modifier: Modifier = Modifier, navController: NavController) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(1),
             contentPadding = PaddingValues(10.dp),
-            modifier = modifier.fillMaxSize().weight(3.0f)
+            modifier = modifier.fillMaxSize()
         ) {
             items(gameList.size){ index ->
                 val name = gameList[index]
                 //Show the thumbnail of each game
-                Box(
-                    modifier = Modifier
-                        .border(2.dp, Color.White, shape = androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
+                Image(
+                    modifier = modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
-                ){
-                    Button(onClick = { navController.navigate(name) }) {
-                        Text(
-                            name,
-                            modifier = Modifier
-                                .padding(10.dp)
-                        )
-                    }
-                }
+                        .height(250.dp)
+                        .width(250.dp),
+                    painter = painterResource(
+                        when(name){
+                            "Tic Tac Toe"-> R.drawable.tic_tac_toe
+                            "Numbers" -> R.drawable.numbers
+                            else -> R.drawable.simon_says
+                        }
+                    ),
+                    contentDescription = null
+                )
             }
         }
-        Box(modifier = Modifier.weight(2.0f))
     }
 }
 
@@ -111,9 +111,9 @@ fun UI(modifier: Modifier = Modifier){
         //Define the main menu composable
         composable("MainMenu"){ TitlePage(modifier, navController) }
         //Define each game's game screen composable
-        composable("TicTacToe") { TicTacToe().PlayGame(modifier, navController) }
-        composable("SimonSays") { SimonSays().PlayGame(modifier, navController) }
-        composable("Numbers") { Numbers().PlayGame(modifier, navController) }
+        composable("tic_tac_toe") { TicTacToe().PlayGame(modifier, navController) }
+        composable("simon_says") { SimonSays().PlayGame(modifier, navController) }
+        composable("numbers") { Numbers().PlayGame(modifier, navController) }
     })
 }
 
